@@ -42,52 +42,27 @@ You have to initialize this library with an instance of a catbox client.
 #### Promise Memoization Example:
 This code is also available [here](./example/promise-example.js).
 ```javascript
-'use strict'
-
-const Catbox = require('catbox')
-const CatboxMemory = require('catbox-memory')
 const litterBox = require('litter-box')
+litterBox.init(aStartedCatboxClient)
 
-const setupClient = (callback) => {
-  const client = new Catbox.Client(CatboxMemory, { maxByteSize: 10485760 })
-  return client.start((err) => {
-    if (err) {
-      return callback(err)
-    }
-    if (!client.isReady()) {
-      return callback(new Error('Cache client is not ready.'))
-    }
-    return callback(null, client)
-  })
-}
+const examplePromiseFunction = (input) => Promise.resolve(input)
 
-const onError = (err) => {
-  console.error(err)
-  process.exit(1)
-}
-
-setupClient((err, client) => {
-  if (err) {
-    return onError(err)
-  }
-
-  litterBox.init(client)
-  const examplePromiseFunction = (input) => Promise.resolve(input)
-
-  const cachedPromiseFunction = litterBox.memoizeFnPromise({
-    fn: examplePromiseFunction,
-    keyProvider: (input) => ({ segment: 'test', id: `test-${input}` }),
-    ttl: 5 * 60 * 1000 // 5 minutes
-  })
-
-  return cachedPromiseFunction(1234)
-    .then(() => cachedPromiseFunction(1234)) // uses cached 1234 result
-    .catch(onError)
-    .then((result) => { // returns 1234
-      console.log(result)
-      process.exit(0)
-    })
+const cachedPromiseFunction = litterBox.memoizeFnPromise({
+  fn: examplePromiseFunction,
+  keyProvider: (input) => ({ segment: 'test', id: `test-${input}` }),
+  ttl: 5 * 60 * 1000 // 5 minutes
 })
+
+cachedPromiseFunction(1234)
+  .then(() => cachedPromiseFunction(1234)) // uses cached 1234 result
+  .catch((err) => {
+    console.error(err)
+    process.exit(1)
+  })
+  .then((result) => { // returns 1234
+    console.log(result)
+    process.exit(0)
+  })
 ```
 ### Callback Memoization
 ``memoizeFnCallback(options)``
@@ -105,55 +80,24 @@ setupClient((err, client) => {
 #### Callback Memoization Example:
 This code is also available [here](./example/callback-example.js).
 ```javascript
-'use strict'
-
-const Catbox = require('catbox')
-const CatboxMemory = require('catbox-memory')
 const litterBox = require('litter-box')
-
-const setupClient = (callback) => {
-  const client = new Catbox.Client(CatboxMemory, { maxByteSize: 10485760 })
-  return client.start((err) => {
-    if (err) {
-      return callback(err)
-    }
-    if (!client.isReady()) {
-      return callback(new Error('Cache client is not ready.'))
-    }
-    return callback(null, client)
-  })
-}
+litterBox.init(aStartedCatboxClient)
 
 const onError = (err) => {
   console.error(err)
   process.exit(1)
 }
 
-setupClient((err, client) => {
+cachedCallbackFunction(1234, (err, result) => {
   if (err) {
     return onError(err)
   }
-
-  litterBox.init(client)
-  const exampleCallbackFunction = (input, cb) => cb(null, input)
-
-  const cachedCallbackFunction = litterBox.memoizeFnCallback({
-    fn: exampleCallbackFunction,
-    keyProvider: (input) => ({ segment: 'test', id: `test-${input}` }),
-    ttl: 5 * 60 * 1000 // 5 minutes
-  })
-
-  return cachedCallbackFunction(1234, (err, result) => {
+  return cachedCallbackFunction(1234, (err, result) => { // uses cached 1234 result
     if (err) {
       return onError(err)
     }
-    return cachedCallbackFunction(1234, (err, result) => { // uses cached 1234 result
-      if (err) {
-        return onError(err)
-      }
-      console.log(result)
-      process.exit(0)
-    })
+    console.log(result)
+    process.exit(0)
   })
 })
 ```
