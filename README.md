@@ -85,6 +85,12 @@ litterBox.init(aStartedCatboxClient)
 
 const exampleCallbackFunction = (input, cb) => cb(null, input)
 
+const cachedCallbackFunction = litterBox.memoizeFnCallback({
+  fn: exampleCallbackFunction,
+  keyProvider: (input) => ({ segment: 'test', id: `test-${input}` }),
+  ttl: 5 * 60 * 1000 // 5 minutes
+})
+
 const onError = (err) => {
   console.error(err)
   process.exit(1)
