@@ -83,6 +83,8 @@ This code is also available [here](./example/callback-example.js).
 const litterBox = require('litter-box')
 litterBox.init(aStartedCatboxClient)
 
+const exampleCallbackFunction = (input, cb) => cb(null, input)
+
 const onError = (err) => {
   console.error(err)
   process.exit(1)
