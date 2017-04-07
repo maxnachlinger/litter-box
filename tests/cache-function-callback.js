@@ -28,7 +28,9 @@ test('Unit: cache-function-callback', (t) => {
   t.test('Setup', (t) => reset(t.end))
 
   t.test('caches a callback-returning function', (t) => {
-    const fn = sandbox.stub().yields(null, { test: true })
+    const input = 1000
+    const fn = sandbox.stub().yields(null, input)
+
     const cachedFn = lib.memoizeFnCallback({
       fn,
       keyProvider: (input) => ({ segment: 'test', id: `test-${input}` }),
@@ -36,11 +38,12 @@ test('Unit: cache-function-callback', (t) => {
     }) // function() {}
 
     return async.series([
-      (callback) => cachedFn(1000, callback),
-      (callback) => cachedFn(1000, callback)
-    ], (err) => {
+      (callback) => cachedFn(input, callback),
+      (callback) => cachedFn(input, callback)
+    ], (err, result) => {
       t.notOk(err, 'No error is returned')
       t.ok(fn.calledOnce, 'Function should only be called once')
+      t.deepEqual(result, [input, input], 'Shoulo return valid output')
       t.end()
     })
   })

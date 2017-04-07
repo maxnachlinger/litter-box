@@ -27,7 +27,9 @@ test('Unit: cache-function-callback', (t) => {
   t.test('Setup', (t) => reset(t.end))
 
   t.test('caches a promise-returning function', (t) => {
-    const fn = sandbox.stub().returns(Promise.resolve({ test: true }))
+    const input = 1000
+    const fn = sandbox.stub().returns(Promise.resolve(input))
+
     const cachedFn = lib.memoizeFnPromise({
       fn,
       keyProvider: (input) => ({ segment: 'test', id: `test-${input}` }),
@@ -35,7 +37,13 @@ test('Unit: cache-function-callback', (t) => {
     }) // function() {}
 
     return cachedFn(1000)
+      .then((result) => {
+        t.equal(result, input, 'Should return valid input')
+      })
       .then(() => cachedFn(1000))
+      .then((result) => {
+        t.equal(result, input, 'Should return valid input')
+      })
       .catch(t.fail)
       .then(() => {
         t.ok(fn.calledOnce, 'Function should only be called once')
