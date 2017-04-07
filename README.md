@@ -32,12 +32,12 @@ You have to initialize this library with an instance of a catbox client.
 #### Arguments
 * ``options``: ``object``. Required. An object with the following keys:
   * ``fn``: ``Function``. Required. A function which returns a Promise.
+  * ``ttl``: ``Integer``. Required. The time-to-live for the cached ``fn`` result.
   * ``keyProvider``: ``(fn-input) => {id, segment}``. Required. A function which returns a cache-key for Catbox. This 
   function is called with the same arguments as ``fn``, allowing you to create a dynamic cache-key, for example: 
 ```javascript
   const exampleKeyProvider = (input) => ({ segment: 'test', id: `test-${input}` })
 ```
-  * ``ttl``: ``Integer``. Required. The time-to-live for the cached ``fn`` result.
 
 #### Promise Memoization Example:
 This code is also available [here](./example/promise-example.js).
@@ -95,12 +95,12 @@ setupClient((err, client) => {
 #### Arguments
 * ``options``: ``object``. Required. An object with the following keys:
   * ``fn``: ``Function``. Required. A function which has a callback as it's final argument.
+  * ``ttl``: ``Integer``. Required. The time-to-live for the cached ``fn`` result.
   * ``keyProvider``: ``(fn-input) => {id, segment}``. Required. A function which returns a cache-key for Catbox. This 
   function is called with the same arguments as ``fn``, allowing you to create a dynamic cache-key, for example: 
 ```javascript
   const exampleKeyProvider = (input) => ({ segment: 'test', id: `test-${input}` })
 ```
-  * ``ttl``: ``Integer``. Required. The time-to-live for the cached ``fn`` result.
 
 #### Callback Memoization Example:
 This code is also available [here](./example/callback-example.js).
