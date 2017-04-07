@@ -27,10 +27,10 @@ setupClient((err, client) => {
     return onError(err)
   }
 
-  litterBox.init(client)
   const exampleCallbackFunction = (input, cb) => cb(null, input)
 
   const cachedCallbackFunction = litterBox.memoizeFnCallback({
+    client,
     fn: exampleCallbackFunction,
     keyProvider: (input) => ({ segment: 'test', id: `test-${input}` }),
     ttl: 5 * 60 * 1000 // 5 minutes

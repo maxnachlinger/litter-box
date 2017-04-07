@@ -19,7 +19,6 @@ test('Unit: cache-function-callback', (t) => {
         return callback(err)
       }
       client = clientResult
-      lib.init(clientResult)
       return callback()
     })
   }
@@ -31,6 +30,7 @@ test('Unit: cache-function-callback', (t) => {
     const fn = sandbox.stub().returns(Promise.resolve(input))
 
     const cachedFn = lib.memoizeFnPromise({
+      client,
       fn,
       keyProvider: (input) => ({ segment: 'test', id: `test-${input}` }),
       ttl: 500
@@ -56,6 +56,7 @@ test('Unit: cache-function-callback', (t) => {
   t.test('does not cache a promise-returning function returning an error', (t) => {
     const fn = sandbox.stub().returns(Promise.reject(new Error('test')))
     const cachedFn = lib.memoizeFnPromise({
+      client,
       fn,
       keyProvider: (input) => ({ segment: 'test', id: `test-${input}` }),
       ttl: 500

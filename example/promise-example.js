@@ -27,10 +27,10 @@ setupClient((err, client) => {
     return onError(err)
   }
 
-  litterBox.init(client)
   const examplePromiseFunction = (input) => Promise.resolve(input)
 
   const cachedPromiseFunction = litterBox.memoizeFnPromise({
+    client,
     fn: examplePromiseFunction,
     keyProvider: (input) => ({ segment: 'test', id: `test-${input}` }),
     ttl: 5 * 60 * 1000 // 5 minutes

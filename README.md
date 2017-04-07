@@ -13,24 +13,12 @@ A few function memoization helpers to work with [catbox](https://github.com/hapi
 [standard-image]: https://img.shields.io/badge/code%20style-standard-brightgreen.svg
 [standard-url]: http://standardjs.com/
 
-### Installation:
-```
-npm i litter-box --save
-```
-
-### Initialization
-You have to initialize this library with an instance of a catbox client.
-
-``init(catbox-client-instance)``
-
-#### Arguments
-* ``catbox-client-instance``: ``object``. Required. An instance of a Catbox Client. 
-
 ### Promise Memoization
-``memoizeFnPromise(options)``
+``litterBox.memoizeFnPromise(options)``
 
 #### Arguments
 * ``options``: ``object``. Required. An object with the following keys:
+  * ``client``: ``Catbox Client Instance``. Required. A catbox client instance.
   * ``fn``: ``Function``. Required. A function which returns a Promise.
   * ``ttl``: ``Integer``. Required. The time-to-live for the cached ``fn`` result.
   * ``keyProvider``: ``(fn-input) => {id, segment}``. Required. A function which returns a cache-key for Catbox. This 
@@ -43,11 +31,11 @@ You have to initialize this library with an instance of a catbox client.
 This code is also available [here](./example/promise-example.js).
 ```javascript
 const litterBox = require('litter-box')
-litterBox.init(aStartedCatboxClient)
 
 const examplePromiseFunction = (input) => Promise.resolve(input)
 
 const cachedPromiseFunction = litterBox.memoizeFnPromise({
+  client: catboxClientInstance,
   fn: examplePromiseFunction,
   keyProvider: (input) => ({ segment: 'test', id: `test-${input}` }),
   ttl: 5 * 60 * 1000 // 5 minutes
@@ -65,10 +53,11 @@ cachedPromiseFunction(1234)
   })
 ```
 ### Callback Memoization
-``memoizeFnCallback(options)``
+``litterBox.memoizeFnCallback(options)``
 
 #### Arguments
 * ``options``: ``object``. Required. An object with the following keys:
+  * ``client``: ``Catbox Client Instance``. Required. A catbox client instance.
   * ``fn``: ``Function``. Required. A function which has a callback as it's final argument.
   * ``ttl``: ``Integer``. Required. The time-to-live for the cached ``fn`` result.
   * ``keyProvider``: ``(fn-input) => {id, segment}``. Required. A function which returns a cache-key for Catbox. This 
@@ -81,11 +70,11 @@ cachedPromiseFunction(1234)
 This code is also available [here](./example/callback-example.js).
 ```javascript
 const litterBox = require('litter-box')
-litterBox.init(aStartedCatboxClient)
 
 const exampleCallbackFunction = (input, cb) => cb(null, input)
 
 const cachedCallbackFunction = litterBox.memoizeFnCallback({
+  client: catboxClientInstance,
   fn: exampleCallbackFunction,
   keyProvider: (input) => ({ segment: 'test', id: `test-${input}` }),
   ttl: 5 * 60 * 1000 // 5 minutes
