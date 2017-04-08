@@ -72,7 +72,7 @@ const litterBox = require('litter-box')
 
 const exampleCallbackFunction = (input, cb) => cb(null, input)
 
-const cachedPromiseFunction = litterBox.memoizeFnPromise({
+const cachedCallbackFunction = litterBox.memoizeFnPromise({
   client: catboxClientInstance,
   fn: exampleCallbackFunction,
   keyProvider: (input) => ({ segment: 'test', id: `test-${input}` }),
