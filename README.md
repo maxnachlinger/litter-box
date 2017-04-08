@@ -42,11 +42,10 @@ const cachedPromiseFunction = litterBox.memoizeFnPromise({
 })
 
 cachedPromiseFunction(1234)
-  .then(() => cachedPromiseFunction(1234)) // uses cached 1234 result
-  .catch((err) => {
-    console.error(err)
-    process.exit(1)
-  })
+  .then(console.log) // prints 1234
+
+// later on...
+cachedPromiseFunction(1234) // function not executed, value is pulled from the cache
   .then((result) => { // returns 1234
     console.log(result)
     process.exit(0)
@@ -73,28 +72,17 @@ const litterBox = require('litter-box')
 
 const exampleCallbackFunction = (input, cb) => cb(null, input)
 
-const cachedCallbackFunction = litterBox.memoizeFnCallback({
+const cachedPromiseFunction = litterBox.memoizeFnPromise({
   client: catboxClientInstance,
   fn: exampleCallbackFunction,
   keyProvider: (input) => ({ segment: 'test', id: `test-${input}` }),
   ttl: 5 * 60 * 1000 // 5 minutes
 })
 
-const onError = (err) => {
-  console.error(err)
-  process.exit(1)
-}
+cachedCallbackFunction(1234, (err, result) => console.log(result)) // prints 1234
 
-cachedCallbackFunction(1234, (err, result) => {
-  if (err) {
-    return onError(err)
-  }
-  return cachedCallbackFunction(1234, (err, result) => { // uses cached 1234 result
-    if (err) {
-      return onError(err)
-    }
-    console.log(result)
-    process.exit(0)
-  })
-})
+// later on...
+
+// function not executed, value is pulled from the cache
+cachedCallbackFunction(1234, (err, result) => console.log(result)) // prints 1234
 ```
