@@ -86,3 +86,4 @@ cachedCallbackFunction(1234, (err, result) => console.log(result)) // prints 123
 // function not executed, value is pulled from the cache
 cachedCallbackFunction(1234, (err, result) => console.log(result)) // prints 1234
 ```
+l
