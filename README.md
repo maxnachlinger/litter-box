@@ -13,10 +13,10 @@ A few function memoization helpers to work with [catbox](https://github.com/hapi
 [standard-image]: https://img.shields.io/badge/code%20style-standard-brightgreen.svg
 [standard-url]: http://standardjs.com/
 
-### Promise Memoization
+## Promise Memoization
 ``litterBox.memoizeFnPromise(options)``
 
-#### Arguments
+### Arguments
 * ``options``: ``object``. Required. An object with the following keys:
   * ``client``: ``Catbox Client Instance``. Required. A catbox client instance.
   * ``fn``: ``Function``. Required. A function which returns a Promise.
@@ -27,7 +27,7 @@ A few function memoization helpers to work with [catbox](https://github.com/hapi
   const exampleKeyProvider = (input) => ({ segment: 'test', id: `test-${input}` })
 ```
 
-#### Promise Memoization Example:
+### Example:
 This code is also available [here](./example/promise-example.js).
 ```javascript
 const litterBox = require('litter-box')
@@ -51,10 +51,10 @@ cachedPromiseFunction(1234) // function not executed, value is pulled from the c
     process.exit(0)
   })
 ```
-### Callback Memoization
+## Callback Memoization
 ``litterBox.memoizeFnCallback(options)``
 
-#### Arguments
+### Arguments
 * ``options``: ``object``. Required. An object with the following keys:
   * ``client``: ``Catbox Client Instance``. Required. A catbox client instance.
   * ``fn``: ``Function``. Required. A function which has a callback as it's final argument.
@@ -65,7 +65,7 @@ cachedPromiseFunction(1234) // function not executed, value is pulled from the c
   const exampleKeyProvider = (input) => ({ segment: 'test', id: `test-${input}` })
 ```
 
-#### Callback Memoization Example:
+#### Example:
 This code is also available [here](./example/callback-example.js).
 ```javascript
 const litterBox = require('litter-box')
