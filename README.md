@@ -13,6 +13,9 @@ A few function memoization helpers to work with [catbox](https://github.com/hapi
 [standard-image]: https://img.shields.io/badge/code%20style-standard-brightgreen.svg
 [standard-url]: http://standardjs.com/
 
+## Note:
+Rejected promises and callbacks called with an ``err`` argument are not memoized, since that's a pretty bad idea :)
+
 ## Promise Memoization
 ``litterBox.memoizeFnPromise(options)``
 
